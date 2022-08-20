@@ -1,0 +1,89 @@
+UNIVERSIDAD DE SAN CARLOS DE GUATEMALA
+José Alfredo Gonzalez Tupas
+$$$$$$$$$$$$$$$$$$$$$$$$$$--TAREA 3--$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+1) Investigar cómo se lee un archivo CSV desde R:
+Se puede realizar la lectura o importación de datos en un archivo CSV en R utilizando las funciones read.csv y red.csv2.
+
+Instalar el packete para utilizar las funciones con el comando install.packages("readr") y cargamos el uso de la libreria con library(readr) 
+cone el comando file.choose() podemos visualizar la ruta donde nos encontramos.
+
+
+Sintaxis:
+ 1.1) read.csv(file,                 # Nombre del archivo o ruta completa del archivo
+         header = TRUE,        # Leer el encabezado (TRUE) o no (FALSE)
+         sep = ",",            # Separador de los valores
+         quote = "\"",         # Caracter de citaciones
+         dec = ".",            # Punto decimal
+         fill = TRUE,          # Rellenar celdas vacías (TRUE) o no (FALSE)
+         comment.char = "",    # Carácter de los comentarios o cadenas vacías
+         encoding = "unknown", # Codificación del archivo
+         ...)                  # Argumentos adicionales
+
+ 1.2)
+read.csv2(file, header = TRUE, sep = ";", quote = "\"", dec = ",",
+          fill = TRUE, comment.char = "", encoding = "unknown", ...)
+          
+2) Investigue acerca de la función select() de la paquetería de dplyr:
+La función Select permite la selección de columnas o un rango en un data frame.
+
+3) Lea el dataset compartido (primary_results.csv) y asignelo a la variable dataset_results.
+```{r}
+#install.packages("readr")
+library(readr)
+file.choose()
+ruta <- "C:/Users/jose_/Desktop/Sesiones R/Tarea3/primary_results.csv"
+dataset_result = read.csv(ruta, header = TRUE, sep = ",")
+dataset_result
+``` 
+4) Aplique los conocimientos de filter, arrange, mutate y también select para desarrollar los
+siguientes ejercicios:
+
+4.1) Filtrar todos los votos del estado de Florida:
+```{r}
+library(dplyr)
+dataset_result
+filter(dataset_result, state == "Florida")
+```
+4.2) Utilice operadores lógicos (& and |), según corresponda:
+
+4.2.1) Filtrar votos para los candidatos Hillary Clinton o Donald Trump:
+```{r}
+dataset_result
+filter(dataset_result, candidate == "Hillary Clinton" | candidate == "Donald Trump")
+```
+4.2.2) Filtrar votos para el partido Demócrata y el condado Shelby:
+```{r}
+dataset_result
+filter(dataset_result, party == "Democrat" & county == "Shelby")
+```
+4.2.3) Filtrar votos para el estado de Alabama y que la cantidad de votos sea mayor a 15000:
+```{r}
+dataset_result
+filter(dataset_result, state == "Alabama" & votes > 15000)
+```
+4.3) Utilice la función select y arrange para el siguiente filtrado:
+
+4.3.1) Filtrar votos para el estado de Texas y el condado Denton, seleccionando
+únicamente las columnas party, candidate, votes, luego ordene de forma
+descendente por la columna votes:
+```{r}
+dataset_result
+arrange(select(filter(dataset_result, state == "Texas" & county == "Denton"), party : votes), desc(votes))
+```
+4.4) Utilice el verbo mutate y arrange para el siguiente filtrado:
+
+4.4.1) Filtrar por el partido Republicano, que el candidato sea Ted Cruz en el estado de
+Alaska, luego agregue una columna que se llame vote_count que sea la división de
+votes por fraction_votes (votes/fraction_votes), finalmente ordene de forma
+descendente por vote_count.
+```{r}
+dataset_result
+arrange(mutate(filter(dataset_result, party == "Republican" & candidate == "Ted Cruz" & state == "Alaska"), vote_count = votes/fraction_votes), desc(vote_count))
+```
+
+
+
+
+
+
